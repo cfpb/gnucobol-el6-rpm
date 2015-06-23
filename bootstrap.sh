@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 sudo yum -y groupinstall 'Development Tools'
+sudo yum -y install gmp gmp-devel db4 db4-devel ncurses ncurses-devel
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
@@ -13,14 +14,5 @@ mkdir -p $HOME/rpmbuild/{BUILD,RPMS,SOURCES,SRPMS}
 ln -sf $SCRIPTPATH/SPECS $HOME/rpmbuild/SPECS
 echo '%_topdir '$HOME'/rpmbuild' > $HOME/.rpmmacros
 
-# Install Rust
-curl -sSf -O https://static.rust-lang.org/rustup.sh
-sh rustup.sh -y -s -- --channel=nightly
-
-# Get XSV source
-git clone https://github.com/BurntSushi/xsv
-tar -cJvf xsv.tar.xz xsv
-cp xsv.tar.xz $HOME/rpmbuild/SOURCES/
-
-# Setup LD_LIBRARY_PATH var
-echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/" | sudo tee /etc/profile.d/rust.sh
+# Get GnuCOBOL source
+wget http://downloads.sourceforge.net/project/open-cobol/gnu-cobol/1.1/gnu-cobol-1.1.tar.gz -P $HOME/rpmbuild/SOURCES/ -q
